@@ -92,7 +92,7 @@ def read_flat_frames(filePaths):
     :param filePaths:
     :return: flattened dataframe
     '''
-    with ProcessPoolExecutor(max_workers=cpu_count()-1) as executor:
+    with ProcessPoolExecutor(max_workers=(cpu_count()-1)) as executor:
         results = list(executor.map(pd.read_pickle, filePaths))
     dataframe = results[0].append(results[1:])
     return dataframe
