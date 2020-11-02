@@ -46,7 +46,10 @@ def download_and_flatten_dataframes():
     If no local copy of the dataframes exist already, this function will initiate download from the
     open data repository, select the necessary variables and format the data into a flat format that
     can be used in the training code. This has a large overhead in running time, so the flattening
-    should not be done too often. It takes O(1 hour) to run the flattening.
+    should not be done too often. It takes O(1 hour) to run, but realistically one only needs to do
+    this step when first running the code, or if there are some fundamental changes in which variables
+    to include from the JetNTuple.
+
     :return: dataframe of the flat jets
     '''
     if os.path.exists("./tmp"):
