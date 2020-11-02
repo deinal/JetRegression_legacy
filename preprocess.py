@@ -1,9 +1,8 @@
+'''
+Functions used for preprocessing the dataframes for training
+'''
 import config
-import glob
 import numpy as np
-import tensorflow as tf
-import re
-import os
 
 def preprocess_dataframe(dataframe, trainingVariables):
     '''

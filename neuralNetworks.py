@@ -1,3 +1,7 @@
+'''
+Functions defining the networks for training.
+'''
+
 import tensorflow as tf
 import tensorflow.keras as keras
 

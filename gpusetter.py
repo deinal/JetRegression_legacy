@@ -1,8 +1,3 @@
-from os import environ
-from gpustat import GPUStatCollection
-from numpy import argsort
-from tensorflow import config as tf_config
-
 '''
 Notes on GPU settings:
 On a multi-gpu machine where the GPUs are interconnected at least (single host, multi device), there is a scaling when using TensorFlow MirroredStrategy
@@ -29,6 +24,13 @@ convert_variables_to_constants_v2 cannot handle those gracefully.
 If you dont want to play around with using multiple GPUs, just set n_gpus=1 and split_gpu_into=1 and it'll give you the
 standard one GPU treatment.
 '''
+
+from os import environ
+from gpustat import GPUStatCollection
+from numpy import argsort
+from tensorflow import config as tf_config
+
+
 gpu_settings = {
     "n_gpus": 1,
     "min_vram": 3700,

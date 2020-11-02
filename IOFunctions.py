@@ -1,3 +1,6 @@
+'''
+Functions responsible for reading and writing the data.
+'''
 
 import glob
 from uproot import open
