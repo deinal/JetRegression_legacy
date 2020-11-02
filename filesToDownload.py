@@ -1,6 +1,7 @@
 '''
 This file simply contains the urls of the JetNTuple files stored in the opendata portal. If a local copy of
 flattened versions of these files does not exist, the code downloads and reformats them during the first run.
+See: http://opendata.cern.ch/record/12100 for guidance and how to cite.
 '''
 
 filelist = [

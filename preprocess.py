@@ -35,15 +35,12 @@ def get_energy_in_rings(dataframe):
 
         bitmask = dataframe.loc[:, chgDr].applymap(lambda x: (x > threshold[0] and x < threshold[1]))
         dataframe.loc[:, "ringChg_{}".format(ind)] = np.sum(np.multiply(bitmask, dataframe.loc[:, chgPt]), axis=1)
-        config.globalVariables.append("ringChg_{}".format(ind))
 
         bitmask = dataframe.loc[:, neuDr].applymap(lambda x: (x > threshold[0] and x < threshold[1]))
         dataframe.loc[:, "ringNeu_{}".format(ind)] = np.sum(np.multiply(bitmask, dataframe.loc[:, neuPt]), axis=1)
-        config.globalVariables.append("ringNeu_{}".format(ind))
 
         bitmask = dataframe.loc[:, phoDr].applymap(lambda x: (x > threshold[0] and x < threshold[1]))
         dataframe.loc[:, "ringPho_{}".format(ind)] = np.sum(np.multiply(bitmask, dataframe.loc[:, phoPt]), axis=1)
-        config.globalVariables.append("ringPho_{}".format(ind))
 
         ind = ind+1
 

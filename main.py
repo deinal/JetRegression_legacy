@@ -130,7 +130,7 @@ with strategy.scope():
     history = network.fit(
             dataset,
             validation_data=val_dataset,
-            epochs=5,
+            epochs=100,
             callbacks=[reduceLROnPlateau, earlyStopping],
             )
     # ===================
