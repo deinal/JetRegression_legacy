@@ -49,6 +49,8 @@ def download_and_flatten_dataframes():
     should not be done too often. It takes O(1 hour) to run the flattening.
     :return: dataframe of the flat jets
     '''
+    if os.path.exists("./tmp"):
+        shutil.rmtree("./tmp")
     os.mkdir("./tmp")
     with ProcessPoolExecutor(max_workers=cpu_count() - 1) as executor:
         results = list(executor.map(process_url, tuple(zip(range(1, len(filelist) + 1), filelist))))

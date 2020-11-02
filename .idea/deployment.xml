@@ -5,7 +5,7 @@
       <paths name="hajohajo@dx:22">
         <serverdata>
           <mappings>
-            <mapping deploy="/work/hajohajo/pycharmProjects/JetRegressionFinal" local="$PROJECT_DIR$" />
+            <mapping deploy="/work/hajohajo/pycharmProjects/JetRegression_legacy" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -13,6 +13,13 @@
         <serverdata>
           <mappings>
             <mapping deploy="/work/hajohajo/pycharmProjects/JetRegressionFinal" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="hajohajo@dx:22 (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/work/hajohajo/pycharmProjects/JetRegression_legacy" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
