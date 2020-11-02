@@ -2,6 +2,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 import numpy as np
+from matplotlib.transforms import ScaledTranslation
 
 def getBinnedStatistics(variable, binningVariable, binning):
     indices = np.digitize(binningVariable, binning, right=True)
@@ -20,7 +21,7 @@ def getBinnedStatistics(variable, binningVariable, binning):
 
     return binMean, binStd
 
-from matplotlib.transforms import ScaledTranslation
+
 def plotInclusiveResponse(dataframe, name):
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(3, 6), constrained_layout=True)
     fig.suptitle("Inclusive response")
@@ -123,7 +124,6 @@ def plotResidual(dataframe, name):
     plt.close()
 
 
-# binningToUse = np.linspace(0.0, 600.0, 61)
 def plotCorrectedPtVsGenPt(dataframe, binningToUse, name):
     fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'height_ratios': [2, 1]}, figsize=(12, 6))
     fig.suptitle("Mean response with respect to genPt ({})".format(name))

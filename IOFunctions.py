@@ -51,7 +51,7 @@ def download_and_flatten_dataframes():
     '''
     os.mkdir("./tmp")
     with ProcessPoolExecutor(max_workers=cpu_count() - 1) as executor:
-        results = list(executor.map(process_url, tuple(zip(range(1, len(filelist) + 1), filelist[:10]))))
+        results = list(executor.map(process_url, tuple(zip(range(1, len(filelist) + 1), filelist))))
     dataframe = results[0].append(results[1:])
     shutil.rmtree("./tmp")
     return dataframe

@@ -138,7 +138,7 @@ with strategy.scope():
 
 #Predictions for test dataset corrections
 predictions = network.predict([scaled_testDataframe.loc[:, config.globalVariables], format_pf_candidates_for_convolutions(scaled_testDataframe.loc[:, config.flattenedChgParticleVariables], config.nChgPfVariables), format_pf_candidates_for_convolutions(scaled_testDataframe.loc[:, config.flattenedNeuParticleVariables], config.nNeuPfVariables), format_pf_candidates_for_convolutions(scaled_testDataframe.loc[:, config.flattenedPhoParticleVariables], config.nPhoPfVariables)],
-                              batch_size=128,
+                              batch_size=config.batch_size,
                               use_multiprocessing=True, workers=12
                               )
 # ===================

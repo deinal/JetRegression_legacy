@@ -7,7 +7,7 @@ are used and how many pfCandidates at maximum are taken into account per jet
 batch_size = 512
 globalVariables = ["jetPt", "jetEta", "QG_ptD", "QG_axis2", "QG_mult", 'alpha']
 pfVariables = ['PF_pT', 'PF_dR', 'PF_dPhi']
-chgParticleVariables = ["jetPF_chg_pT", "jetPF_chg_dR", "jetPF_chg_dPhi"]#, "jetPF_chg_dxy", "jetPF_chg_dz"] #, "genPF_chg_pT", "genPF_chg_dR", "genPF_chg_dPhi"]]
+chgParticleVariables = ["jetPF_chg_pT", "jetPF_chg_dR", "jetPF_chg_dPhi"]
 neuParticleVariables = ["jetPF_neu_pT", "jetPF_neu_dR", "jetPF_neu_dPhi"]
 phoParticleVariables = ["jetPF_pho_pT", "jetPF_pho_dR", "jetPF_pho_dPhi"]
 truthVariables = ["genJetPt", "isPhysUDS", "isPhysG"]
