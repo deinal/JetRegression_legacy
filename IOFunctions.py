@@ -3,14 +3,15 @@ Functions responsible for reading and writing the data.
 '''
 
 import glob
-from uproot import open
+from uproot import open as upopen
 import pandas as pd
 import numpy as np
 import os
 import shutil
+import traceback
 
 from filesToDownload import filelist
-import urllib.request as request
+import requests
 from multiprocessing import cpu_count
 from concurrent.futures import ProcessPoolExecutor
 from preprocess import get_energy_in_rings
@@ -60,7 +61,12 @@ def download_and_flatten_dataframes():
     os.mkdir("./tmp")
     with ProcessPoolExecutor(max_workers=cpu_count() - 1) as executor:
         results = list(executor.map(process_url, tuple(zip(range(1, len(filelist) + 1), filelist))))
-    dataframe = results[0].append(results[1:])
+    success = []
+    for res in results:
+        if not isinstance(res, Exception):
+            success.append(res)
+    dataframe = success[0].append(success[1:])
+    print(f"{len(success)}/{len(results)} files processed successfully")
     shutil.rmtree("./tmp")
     return dataframe
 
@@ -68,26 +74,41 @@ def process_url(address):
     '''
     Downloads the file from the address, preselects the jets of interest with the selection conditions
     and formats them into a flat dataframe (so that the pfCandidate variables are in individual columns
-    instead of being stored in vectors
+    instead of being stored in vectors.
     :param address: url to file storage, see filesToDownload.py
     :return: flattened dataframe where each row is a jet with scalar variable values in columns
     '''
-    filename = address[1].rsplit('/', 1)[-1]
-    print(f'Downloading: {filename}')
-    savepath = './tmp/' + filename
-    request.urlretrieve(address[1], savepath)
-    tree = open(savepath)['AK4jets/jetTree'].arrays(namedecode='utf-8')
-    dataframe = pd.DataFrame(tree, columns=tree.keys())
-    isCorrectParton = (
-                np.array(dataframe.loc[:, "isPhysUDS"].values == 1) | np.array(dataframe.loc[:, "isPhysG"].values == 1))
-    nPfCandidates = dataframe.loc[:, "PF_pT"].values
-    nPfCandidates = [len(candidates) >= 3 for candidates in nPfCandidates]
-    conditions = ((dataframe.genJetPt > 30) & (dataframe.genJetPt < 1000) & (np.abs(dataframe.genJetEta) < 2.5) & isCorrectParton & nPfCandidates)
-    dataframe = dataframe.loc[conditions, :]
-    dataframe.reset_index(inplace=True, drop=True)
-    dataframe = create_flat_frame(dataframe, address[0])
-    os.remove(savepath)
-    return dataframe
+    try:
+        filename = address[1].rsplit('/', 1)[-1]
+        url = address[1]
+        print(f'Downloading: {filename}')
+        savepath = f'./tmp/{filename}'
+        with requests.get(url, allow_redirects=True, stream=True) as r:
+            with open(savepath, 'wb') as fd:
+                for chunk in r.iter_content(chunk_size=128):
+                    fd.write(chunk)
+        tree = upopen(savepath)['AK4jets/jetTree'].arrays(namedecode='utf-8')
+        dataframe = pd.DataFrame(tree, columns=tree.keys())
+
+        #Skimming the jets
+        isCorrectParton = (
+                    np.array(dataframe.loc[:, "isPhysUDS"].values == 1) | np.array(dataframe.loc[:, "isPhysG"].values == 1))
+        nPfCandidates = dataframe.loc[:, "PF_pT"].values
+        nPfCandidates = [len(candidates) >= 3 for candidates in nPfCandidates]
+        conditions = ((dataframe.genJetPt > 30) & (dataframe.genJetPt < 1000) & (np.abs(dataframe.genJetEta) < 2.5) & isCorrectParton & nPfCandidates)
+        dataframe = dataframe.loc[conditions, :]
+        dataframe.reset_index(inplace=True, drop=True)
+
+        dataframe = create_flat_frame(dataframe, address[0])
+        os.remove(savepath)
+        return dataframe
+    except Exception as e:
+        print(f'Caught exception with file {filename}')
+        # This prints the type, value, and stack trace of the
+        # current exception being handled.
+        traceback.print_exc()
+        print()
+        return e
 
 def read_flat_frames(filePaths):
     '''
