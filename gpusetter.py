@@ -37,6 +37,7 @@ gpu_settings = {
     "split_gpu_into": 1
 }
 
+
 def set_gpus(n_gpus=gpu_settings["n_gpus"], min_vram=gpu_settings["min_vram"], split_gpu_into=gpu_settings["split_gpu_into"]):
     '''
     Configures the GPUs to be allocated for training, preferring the GPUs with most free VRAM.
@@ -52,7 +53,7 @@ def set_gpus(n_gpus=gpu_settings["n_gpus"], min_vram=gpu_settings["min_vram"], s
         None
     '''
 
-    if n_gpus==0:
+    if n_gpus == 0:
         environ['CUDA_VISIBLE_DEVICES'] = ''
     gpu_stats = GPUStatCollection.new_query()
     gpu_ids = map(lambda gpu: int(gpu.entry['index']), gpu_stats)
@@ -78,5 +79,6 @@ def set_gpus(n_gpus=gpu_settings["n_gpus"], min_vram=gpu_settings["min_vram"], s
             device,
             [tf_config.LogicalDeviceConfiguration(memory_limit=min_vram) for _ in range(split_gpu_into)]
         )
+
 
 set_gpus()

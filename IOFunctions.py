@@ -25,6 +25,7 @@ pd.set_option('display.max_colwidth', None)
 
 flatFrameDir = "./data/flatFrames"
 
+
 def get_data(remake_flat_frames=False):
     '''
     Fetches the dataframe either from open data storage or local copy if one is found
@@ -41,9 +42,10 @@ def get_data(remake_flat_frames=False):
     else:
         dataframe = read_flat_frames(glob.glob(f'{flatFrameDir}/*.pkl'))
 
-    #silly way to add ring variables to global variables
+    # silly way to add ring variables to global variables
     config.globalVariables = config.globalVariables+[s for s in dataframe.columns if 'ring' in s]
     return dataframe
+
 
 def download_and_flatten_dataframes():
     '''
@@ -70,6 +72,7 @@ def download_and_flatten_dataframes():
     shutil.rmtree("./tmp")
     return dataframe
 
+
 def process_url(address):
     '''
     Downloads the file from the address, preselects the jets of interest with the selection conditions
@@ -90,9 +93,9 @@ def process_url(address):
         tree = upopen(savepath)['AK4jets/jetTree'].arrays(namedecode='utf-8')
         dataframe = pd.DataFrame(tree, columns=tree.keys())
 
-        #Skimming the jets
+        # Skimming the jets
         isCorrectParton = (
-                    np.array(dataframe.loc[:, "isPhysUDS"].values == 1) | np.array(dataframe.loc[:, "isPhysG"].values == 1))
+            np.array(dataframe.loc[:, "isPhysUDS"].values == 1) | np.array(dataframe.loc[:, "isPhysG"].values == 1))
         nPfCandidates = dataframe.loc[:, "PF_pT"].values
         nPfCandidates = [len(candidates) >= 3 for candidates in nPfCandidates]
         conditions = ((dataframe.genJetPt > 30) & (dataframe.genJetPt < 1000) & (np.abs(dataframe.genJetEta) < 2.5) & isCorrectParton & nPfCandidates)
@@ -110,6 +113,7 @@ def process_url(address):
         print()
         return e
 
+
 def read_flat_frames(filePaths):
     '''
     Multi-cpu read method to load data frames to memory
@@ -120,6 +124,7 @@ def read_flat_frames(filePaths):
         results = list(executor.map(pd.read_pickle, filePaths))
     dataframe = results[0].append(results[1:])
     return dataframe
+
 
 def create_flat_frame(dataframe, index):
     """
@@ -147,7 +152,7 @@ def separate_into_charged_neutral_photon(dataframe):
     :param dataframe: unflattened jetNtuple dataframe
     :return: flattened dataframe where pfCandidates have been split into columns
     '''
-    #PF candidate IDs for charged/neutral hadrons and photons
+    # PF candidate IDs for charged/neutral hadrons and photons
     charged = [-211, -11, 11, 211]
     neutral = [310, 130, 111]
     photon = [22]
@@ -189,15 +194,17 @@ def separate_into_charged_neutral_photon(dataframe):
     dataframe.loc[:, f"jetPF_pho_dPhi"] = np.array(pho_phis)
     return dataframe
 
+
 def flatten_particle_data_frame(dataframe, nPfCandidates):
     columnLabels = [x+"_"+str(index) for x in dataframe.columns.values for index in range(nPfCandidates)]
     flatFrame = pd.concat([dataframe.loc[:, column].apply(lambda x: pd.Series(x).iloc[:nPfCandidates]) for column in dataframe.columns], axis=1, ignore_index=True)
     flatFrame.columns = columnLabels
 
-    #Reshuffle labels for convolutions
+    # Reshuffle labels for convolutions
     desiredColumnOrder = [x+"_"+str(index) for index in range(nPfCandidates) for x in dataframe.columns.values]
     flatFrame = flatFrame.loc[:, desiredColumnOrder]
     return flatFrame
+
 
 def format_pf_candidates_for_convolutions(dataframe, nPfVariables):
     """
@@ -214,6 +221,7 @@ def format_pf_candidates_for_convolutions(dataframe, nPfVariables):
     array = dataframe.to_numpy()
     array = array.reshape(-1, nParticles, nPfVariables)
     return array
+
 
 def create_directories():
     directories = ["plots", "logs"]

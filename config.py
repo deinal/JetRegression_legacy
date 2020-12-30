@@ -12,8 +12,8 @@ neuParticleVariables = ["jetPF_neu_pT", "jetPF_neu_dR", "jetPF_neu_dPhi"]
 phoParticleVariables = ["jetPF_pho_pT", "jetPF_pho_dR", "jetPF_pho_dPhi"]
 truthVariables = ["genJetPt", "isPhysUDS", "isPhysG"]
 nChgPfCandidates = 20
-nNeuPfCandidates =10
-nPhoPfCandidates =10
+nNeuPfCandidates = 10
+nPhoPfCandidates = 10
 nChgPfVariables = len(chgParticleVariables)
 nNeuPfVariables = len(neuParticleVariables)
 nPhoPfVariables = len(phoParticleVariables)
@@ -28,7 +28,3 @@ flattenedNeuParticleVariables = [x + "_" + str(index) for index in range(nNeuPfC
                                  neuParticleVariables]
 flattenedPhoParticleVariables = [x + "_" + str(index) for index in range(nPhoPfCandidates) for x in
                                  phoParticleVariables]
-
-
-
-

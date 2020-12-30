@@ -8,6 +8,7 @@ from scipy.stats import norm
 import numpy as np
 from matplotlib.transforms import ScaledTranslation
 
+
 def getBinnedStatistics(variable, binningVariable, binning):
     indices = np.digitize(binningVariable, binning, right=True)
     indices[indices == 0] = 1
@@ -65,6 +66,7 @@ def plotInclusiveResponse(dataframe, name):
     plt.clf()
     plt.close()
 
+
 def plotResidual(dataframe, name):
     fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True, gridspec_kw={'height_ratios': [2, 1]}, figsize=(12, 6))
     fig.suptitle("Mean response residuals w.r.t gen p$_{T}$")
@@ -79,8 +81,8 @@ def plotResidual(dataframe, name):
     up = np.add(binMean, binStd)
     down = np.add(binMean, -binStd)
 
-    controlVariable_1, std_1 = getBinnedStatistics(dataframe.loc[dataframe.isPhysG==1, "jetPt"]/dataframe.loc[dataframe.isPhysG==1, "genJetPt"], binningVariable[dataframe.isPhysG==1], binning)
-    controlVariable_2, std_2 = getBinnedStatistics(dataframe.loc[dataframe.isPhysG!=1, "jetPt"]/dataframe.loc[dataframe.isPhysG!=1, "genJetPt"], binningVariable[dataframe.isPhysG!=1], binning)
+    controlVariable_1, std_1 = getBinnedStatistics(dataframe.loc[dataframe.isPhysG == 1, "jetPt"]/dataframe.loc[dataframe.isPhysG == 1, "genJetPt"], binningVariable[dataframe.isPhysG == 1], binning)
+    controlVariable_2, std_2 = getBinnedStatistics(dataframe.loc[dataframe.isPhysG != 1, "jetPt"]/dataframe.loc[dataframe.isPhysG != 1, "genJetPt"], binningVariable[dataframe.isPhysG != 1], binning)
     controlBinMean = controlVariable_1 - controlVariable_2
     controlBinStd = np.sqrt(std_1 ** 2 + std_2 ** 2)
     controlUp = np.add(controlBinMean, controlBinStd)

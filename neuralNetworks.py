@@ -5,6 +5,7 @@ Functions defining the networks for training.
 import tensorflow as tf
 import tensorflow.keras as keras
 
+
 def create_pfcand_network(nGlobalVariables, nChgPfCandidates, nChgPfVariables, nNeuPfCandidates, nNeuPfVariables,  nPhoPfCandidates, nPhoPfVariables):
     '''
     Creates a neural network similar to the original DeepJet in architecture
@@ -83,7 +84,6 @@ def create_pfcand_network(nGlobalVariables, nChgPfCandidates, nChgPfVariables, n
 
     concat = keras.layers.Concatenate()([inputGlobal, chg_lstm, neu_lstm, pho_lstm])
 
-
     dense = keras.layers.Dense(256, activation='relu', activity_regularizer=_regularization,
                                kernel_initializer=_initializer)(concat)
     dense = keras.layers.BatchNormalization()(dense)
@@ -102,8 +102,8 @@ def create_pfcand_network(nGlobalVariables, nChgPfCandidates, nChgPfVariables, n
     dense = keras.layers.Dropout(_drop)(dense)
 
     output = keras.layers.Dense(1, activation='relu', activity_regularizer=_regularization,
-                               kernel_initializer=_initializer,
-                               bias_initializer=tf.keras.initializers.Constant(1.0))(dense)
+                                kernel_initializer=_initializer,
+                                bias_initializer=tf.keras.initializers.Constant(1.0))(dense)
 
     model = keras.Model([inputGlobal, inputChg, inputNeu, inputPho], output)
     loss_ = tf.keras.losses.Huber()

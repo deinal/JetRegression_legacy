@@ -4,6 +4,7 @@ Functions used for preprocessing the dataframes for training
 import config
 import numpy as np
 
+
 def preprocess_dataframe(dataframe, trainingVariables):
     '''
     Scale all trainingVariables to be in range [-1.0, 1.0]
@@ -11,9 +12,10 @@ def preprocess_dataframe(dataframe, trainingVariables):
     :param trainingVariables: variables used as training inputs to the neural network
     :return: dataframe with variables scaled
     '''
-    dataframe.loc[:, trainingVariables] = 2.0*(dataframe.loc[:, trainingVariables] - dataframe.loc[:, trainingVariables].min()) / ( dataframe.loc[:, trainingVariables].max() - dataframe.loc[:, trainingVariables].min()) - 1.0
+    dataframe.loc[:, trainingVariables] = 2.0*(dataframe.loc[:, trainingVariables] - dataframe.loc[:, trainingVariables].min()) / (dataframe.loc[:, trainingVariables].max() - dataframe.loc[:, trainingVariables].min()) - 1.0
     dataframe.fillna(0.0, inplace=True)
     return dataframe
+
 
 def get_energy_in_rings(dataframe):
     '''
@@ -29,7 +31,7 @@ def get_energy_in_rings(dataframe):
     phoPt = ["jetPF_pho_pT_" + str(index) for index in range(config.nPhoPfCandidates)]
     phoDr = ["jetPF_pho_dR_" + str(index) for index in range(config.nPhoPfCandidates)]
 
-    ind=0
+    ind = 0
     for threshold in [(0.0, 0.05), (0.05, 0.1), (0.1, 0.15), (0.15, 0.2), (0.2, 0.25), (0.25, 0.3), (0.3, 0.7)]:
 
         bitmask = dataframe.loc[:, chgDr].applymap(lambda x: (x > threshold[0] and x < threshold[1]))
@@ -44,6 +46,7 @@ def get_energy_in_rings(dataframe):
         ind = ind+1
 
     return dataframe
+
 
 def get_training_sample_weights(dataframe):
     '''
@@ -100,10 +103,12 @@ def get_training_sample_weights(dataframe):
 #     dataframe.loc[:, "PF_dPhi"] = dataframe.apply(rotate_and_flip, axis=1)
 #     return dataframe.loc[:, ["genJetPt", "isPhysUDS", "isPhysG", "jetPt", "QG_ptD", "QG_axis2", "QG_mult", "PF_pT", "PF_dEta", "PF_dPhi"]]
 
+
 def normalize(array):
     lmin = float(array.min())
     lmax = float(array.max())
     return (array-lmin)/(lmax-lmin)
+
 
 def equalize(array):
     hist = np.histogram(array, bins=np.arange(257))[0]
